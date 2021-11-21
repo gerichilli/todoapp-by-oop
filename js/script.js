@@ -19,9 +19,10 @@ const editTodoForm = document.getElementById("editForm");
 const todoList = document.querySelector(".todos__list");
 
 class App {
+    #theme = "light";
     #todos = [];
-    todo;
-    todoID;
+    #todo;
+    #todoID;
 
     constructor() {
         this._getLocalStorage();
@@ -72,7 +73,7 @@ class App {
 
         // Update data array
         const [title, description, tags] = this._getTodoInputs(editTodoForm);
-        const todoIndex = this.#todos.findIndex(todo => todo.id === this.todoID);
+        const todoIndex = this.#todos.findIndex(todo => todo.id === this.#todoID);
         this.#todos[todoIndex] = {
             ...this.#todos[todoIndex],
             title: title,
@@ -82,7 +83,7 @@ class App {
 
         // Update html
         const updatedHtml = this._generateTodoHtml(this.#todos[todoIndex]);
-        this.todo.innerHTML =  updatedHtml;
+        this.#todo.innerHTML =  updatedHtml;
 
         // Reset modal
         this._resetModal(createTodoForm, e)
@@ -153,13 +154,13 @@ class App {
 
         const checkmark = e.target.previousElementSibling;
         this._setTodoID(e);
-        const todoIndex = this.#todos.findIndex(todo => todo.id === this.todoID);
+        const todoIndex = this.#todos.findIndex(todo => todo.id === this.#todoID);
 
         if(checkmark.checked === false) {
-            this.todo.classList.add("todo--done");
+            this.#todo.classList.add("todo--done");
             this.#todos[todoIndex].done = true;
         } else {
-            this.todo.classList.remove("todo--done");
+            this.#todo.classList.remove("todo--done");
             this.#todos[todoIndex].done = false;
         }     
         
@@ -171,8 +172,8 @@ class App {
 
         this._setTodoID(e);
         
-        this.#todos = this.#todos.filter(todo => todo.id !== this.todoID);
-        this.todo.remove();
+        this.#todos = this.#todos.filter(todo => todo.id !== this.#todoID);
+        this.#todo.remove();
 
         this._setLocalStorage();
     }
@@ -182,7 +183,7 @@ class App {
         this._setTodoID(e);
 
         // Set value to form
-        const todoData = this.#todos.filter(todo => todo.id === this.todoID)[0];
+        const todoData = this.#todos.filter(todo => todo.id === this.#todoID)[0];
 
         const inputTitle = editTodoForm.elements["todoTitle"];
         const inputDescription = editTodoForm.elements["todoDescription"];
@@ -201,8 +202,8 @@ class App {
     }
 
     _setTodoID(e) {
-        this.todo = e.target.closest(".todo");
-        this.todoID = this.todo.getAttribute("data-id");
+        this.#todo = e.target.closest(".todo");
+        this.#todoID = this.#todo.getAttribute("data-id");
     }
 
     _setLocalStorage() {
@@ -210,25 +211,34 @@ class App {
     }
 
     _getLocalStorage() {
-        const data = JSON.parse(localStorage.getItem("todos"));
+        const dataTodos = JSON.parse(localStorage.getItem("todos"));
+        const dataTheme = JSON.parse(localStorage.getItem("theme"));
 
-        if(!data) return;
+        if(dataTodos) {
+            this.#todos = dataTodos;
 
-        this.#todos = data;
+            this.#todos.forEach(todo => {
+                this._renderTodo(todo);
+            })
+        }
 
-        this.#todos.forEach(todo => {
-            this._renderTodo(todo);
-        })
+        if(dataTheme) {
+            this.#theme = dataTheme;
+            this._themeInit();
+        }
+        
     }
 
     _changeTheme() {
-        const currentMode = changeThemeBtn.getAttribute("data-mode");
-        if(!currentMode) return;
+        this.#theme = this.#theme === "light" ? "dark" : "light";
+        this._themeInit();
+        localStorage.setItem("theme", JSON.stringify(this.#theme));
+    }
 
-        const changeMode = currentMode === "light" ? "dark" : "light";
-        changeThemeBtn.setAttribute("data-mode", changeMode);
-        document.documentElement.setAttribute("data-theme", changeMode);
-        logo.src = `./img/logo-${changeMode}.svg`
+    _themeInit() {
+        changeThemeBtn.setAttribute("data-mode", this.#theme);
+        document.documentElement.setAttribute("data-theme", this.#theme);
+        logo.src = `./img/logo-${this.#theme}.svg`;
     }
 
     _openModal(e) {

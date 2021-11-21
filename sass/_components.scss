@@ -1,0 +1,222 @@
+/* tagS */
+.tags {
+    list-style: none;
+}
+
+.tag {
+    --mark-size: 2.8rem;
+
+    display: flex;
+    align-items: center;
+    min-width: var(--mark-size);
+    min-height: var(--mark-size);
+    font-size: 1.4rem;
+    line-height: var(--mark-size);
+    cursor: pointer;
+    position: relative;
+
+    @include respond(desktop-small) {
+        font-size: 1.6rem;
+    }
+
+    &__label {
+        cursor: pointer;
+    }
+
+    &::before,
+    &::after {
+        content: "";
+    }
+
+    &::before {
+        flex-shrink: 0;
+        display: block;
+        width: var(--mark-size);
+        height: var(--mark-size);
+        border-radius: 50%;
+        background-color: $base-color;
+        margin-right: 0.8rem;
+    }
+
+    &--work {
+        &::before {
+            background-color: $tag-work;
+        }
+    }
+
+    &--study {
+        &::before {
+            background-color: $tag-study;
+        }
+    }
+
+    &--enter {
+        &::before {
+            background-color: $tag-enter;
+        }
+    }
+
+    &--family {
+        &::before {
+            background-color: $tag-family;
+        }
+    }
+
+    &--active {
+        &::after {
+            background-color: $tag-active;
+        }
+    }
+}
+
+/* TODO */
+.todo {
+    background-color: $card-color;
+    border-radius: 0.6em;
+    padding: 1.6rem;
+
+    display: flex;
+    flex-direction: column;
+
+    @include respond(tab) {
+        padding: 2.4rem;
+    }
+
+    &--done {
+        .todo__title,
+        .todo__txt {
+            text-decoration: line-through;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.2rem;
+    }
+
+    &__actions {
+        flex-shrink: 0;
+        font-size: 2rem;
+        margin-right: -0.8rem;
+    }
+
+    &__title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    &__btn {
+        font-size: 2.2rem;
+        padding: 0.8rem;
+        color: $text-color;
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 2.4rem;
+        margin-top: auto;
+        text-decoration: none;
+    }
+
+    &__tags {
+        display: flex;
+    }
+}
+
+/* MODALS */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $modal-bg;
+    backdrop-filter: blur(1px);
+    
+    z-index: 2;
+
+    // display: none;
+
+    &__dialog {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 100%;
+        height: 100vh;
+        background: $bg-color;
+        color: $base-color;
+        padding: 0 1.6rem;
+        overflow-y: auto;
+
+        @include respond(small-tab) {
+            width: 75%;
+            height: auto;
+            border-radius: 1.2em;
+            padding: 0 3.2rem;
+        }
+
+        @include respond(tab) {
+            width: 90rem;
+            padding: 0 4.8rem;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2.8rem 0;
+        margin-left: -2.4rem;
+
+        @include respond(small-tab) {
+            padding: 3.2rem 0 1.6rem;
+        }
+
+        @include respond(tab) {
+            padding-top: 4.8rem;
+        }
+    }
+
+    &__body {
+        margin-top: 2.4rem;
+        margin-bottom: 2.4rem;
+
+        @include respond(small-tab) {
+            margin-top: 2.4rem;
+            margin-bottom: 4.8rem;
+        }
+    }
+}
+
+/* BUTTONS */
+.btn {
+    &--cancel,
+    &--submit {
+        font-size: 1.4rem;
+
+        @include respond(small-tab) {
+            font-size: 1.6rem;
+        }
+    }
+
+    &--cancel {
+        padding: 1.6rem 2.4rem;
+        color: $base-color;
+    }
+
+    &--submit {
+        background-color: $base-color;
+        color: $bg-color;
+        padding: 1.6rem 2.4rem;
+        width: 14rem;
+        border-radius: 0.8em;
+        font-weight: 500;
+    }
+}

@@ -1,0 +1,305 @@
+/* HEADER */
+
+.header {
+    display: flex;
+    align-items: center;
+    height: $header-height;
+}
+
+.logo {
+    height: 2rem;
+
+    @include respond(tab) {
+        height: 2.8rem;
+    }
+
+    @include respond(desktop-small) {
+        height: 3rem;
+    }
+}
+
+.change-theme-btn {
+    font-size: 2rem;
+    padding: 0.8rem;
+    color: $base-color;
+
+    @include respond(desktop-small) {
+        font-size: 2.4rem;
+    }
+
+    &[data-mode=light] {
+        .light-icon {
+            display: none;
+        }
+        .dark-icon {
+            display: block;
+        }
+    }
+
+    &[data-mode=dark] {
+        .light-icon {
+            display: block;
+        }
+        .dark-icon {
+            display: none;
+        }
+    }
+}
+
+.add-btn {
+    --height: 2.6rem;
+    --thick: 0.3rem;
+
+    @include respond(tab) {
+        --height: 3.2rem;
+        --thick: 0.4rem;
+    }
+
+    @include respond(desktop-small) {
+        --height: 3.6rem;
+        --thick: 0.5rem;
+    }
+
+    margin-left: auto;
+    width: var(--height);
+    height: var(--height);
+    color: $base-color;
+    position: relative;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        border-radius: 1rem;
+        background-color: currentColor;
+    }
+
+    &::before {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: var(--height);
+        height: var(--thick);
+    }
+
+    &::after {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--thick);
+        height: var(--height);
+    }
+}
+
+/* NAVIGATION */
+.sidebar {
+    margin-top: 1.6rem;
+
+    @include respond(tab) {
+        flex-shrink: 0;
+        width: 24rem;
+        max-height: calc(100vh - calc(--header-height));
+        margin-top: 0;
+        
+        display: flex;
+        flex-direction: column;
+    }
+
+    @include respond(desktop-small) {
+        width: 26rem;
+    }
+}
+
+.nav {
+    &__list {
+        display: flex;
+        justify-content: space-between;
+        color: $base-color;
+
+        @include respond(phone) {
+            margin-left: -1.2rem;
+        }
+
+        @include respond(tab) {
+            flex-direction: column;
+        }
+    }
+
+    &__item {
+        @include respond(phone) {
+            padding: 0.8rem 1.2rem;
+        }
+
+        &:not(:last-child) {
+            @include respond(tab) {
+                margin-bottom: 1.6rem;
+            }
+        }
+    }
+}
+
+.person {
+    display: none;
+    width: 20rem;
+    margin-top: auto;
+
+    position: fixed;
+    left: 3.2rem;
+    bottom: 4rem;
+
+    @include respond(tab) {
+        display: block;
+    }
+
+    @include respond(desktop-small) {
+        left: 8rem;
+    }
+}
+
+/* FORM */
+
+.form-checks {
+    position: relative;
+    z-index: 3;
+    margin: 0 -0.8rem;
+
+    @include respond(small-tab) {
+        display: flex;
+        margin: 0 -1.6rem;
+    }
+
+    & > .tag:not(:last-child) {
+        margin-bottom: 1.6rem;
+
+        @include respond(small-tab) {
+            margin-right: 2.4rem;
+            margin-bottom: 0;
+        }
+    }
+
+    input {
+        position: absolute;
+        left: -10000px;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+
+    .tag {
+        width: fit-content;
+        padding: 0.4rem 0.8rem;
+        background-color: transparent;
+        border-radius: 0.5em;
+
+        @include respond(small-tab) {
+            padding: 0.8rem 1.6rem;
+        }
+    }
+
+    input:checked + .tag {
+        background-color: $tag-active;
+    }
+}
+
+.form-check {
+    --check-size: 2.4rem;
+
+    input {
+        position: absolute;
+        left: -10000px;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+
+    label {
+        display: flex;
+        align-items: center;
+        line-height: var(--check-size);
+        color: $secondary-color;
+        position: relative;
+        transition: all 0.2s;
+
+        &::before,
+        &::after {
+            top: 50%;
+            transition: all 0.1s;
+        }
+        
+        &::before {
+            content: "";
+            display: block;
+            width: var(--check-size);
+            height: var(--check-size);
+            margin-right: 0.8rem;
+            border-radius: 0.5em;
+            border: 1px solid currentColor;
+        }
+
+        &::after {
+            content: "\2713";
+            position: absolute;
+            font-weight: bold;
+            left: calc(var(--check-size) / 2);
+            transform: translate(-50%, -45%);
+            color: currentColor;
+            opacity: 0;
+        }
+    }
+
+    input:checked + label {
+        color: $text-color;
+
+        &::after {
+            opacity: 1;
+        }
+    }
+
+    &--hide {
+        margin-top: 1.2rem;
+
+        input:checked + label {
+            color: $base-color;
+        }
+
+        @include respond(tab) {
+            margin-top: 2.4rem;
+        }
+    }
+}
+
+.form-group {
+    &:not(:last-child) {
+        margin-bottom: 2.4rem;
+    }
+}
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1.6rem;
+}
+
+.form-control {
+    background: $input-bg;
+    font: inherit;
+    font-size: 1.6rem;
+    letter-spacing: inherit;
+    color: $text-color;
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 0.5em;
+    padding: 1.6rem;
+
+    &:focus,
+    &:focus-visible {
+        border-color: $base-color;
+    }
+
+    &.textarea {
+        min-height: 20rem;
+    }
+}

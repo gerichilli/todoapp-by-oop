@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./js/script.js" defer></script>
+    <title>Todo - Helps You Hit Deadlines</title>
+</head>
+
+<body>
+    <header class="header">
+        <img src="./img/logo-light.svg" alt="todo's logo" class="logo">
+        <button class="change-theme-btn" id="themeBtn" data-mode="light">
+            <i class="bi bi-moon-stars-fill dark-icon"></i>
+            <i class="bi bi-sun-fill light-icon"></i>
+        </button>
+        <button class="add-btn addTodo modal-btn" data-target="#addTodoModal"></button>
+    </header>
+    <main class="main">
+        <div class="sidebar">
+            <nav class="nav">
+                <ul class="nav__list tags">
+                    <li class="nav__item tag tag--work tag--active">
+                        <div class="tag__label">work</div>
+                    </li>
+                    <li class="nav__item tag tag--study">
+                        <div class="tag__label">study</div>
+                    </li>
+                    <li class="nav__item tag tag--enter">
+                        <div class="tag__label">entertainment</div>
+                    </li>
+                    <li class="nav__item tag tag--family">
+                        <div class="tag__label">family</div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="form-check form-check--hide">
+                <input type="checkbox" id="hideDone">
+                <label for="hideDone">Hide done tasks</label>
+            </div>
+            <img src="./img/girl.png" alt="" class="person">
+        </div>
+        <section class="todos">
+            <ul class="todos__list">
+                <!-- <li class="todo">
+                    <div class="todo__header">
+                        <h2 class="todo__title">The first task title</h2>
+                        <div class="todo__actions">
+                            <button class="todo__btn"><i class="bi bi-pencil-square"></i></button>
+                            <button class="todo__btn"><i class="bi bi-x-square"></i></button>
+                        </div>
+                    </div>
+                    <div class="todo__body">
+                        <p class="todo__txt">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum rhoncus sit dictum vel
+                            lacus,
+                            morbi lobortis. Quis accumsan, neque, malesuada in adipiscing faucibus lorem.
+                        </p>
+                    </div>
+                    <div class="todo__footer">
+                        <ul class="todo__tags tags">
+                            <li class="tag tag--work">
+                            </li>
+                            <li class="tag tag--study">
+                            </li>
+                            <li class="tag tag--enter">
+                            </li>
+                            <li class="tag tag--family">
+                            </li>
+                        </ul>
+                        <div class="form-check">
+                            <input type="checkbox" id="doneMark-1">
+                            <label for="doneMark-1">Done</label>
+                        </div>
+                    </div>
+                </li>
+                <li class="todo">
+                    <div class="todo__header">
+                        <h2 class="todo__title">The second task title</h2>
+                        <div class="todo__actions">
+                            <button class="todo__btn"><i class="bi bi-pencil-square"></i></button>
+                            <button class="todo__btn"><i class="bi bi-x-square"></i></button>
+                        </div>
+                    </div>
+                    <div class="todo__body">
+                        <p class="todo__txt">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum rhoncus sit dictum vel lacus,
+                            morbi lobortis. Quis accumsan, neque, malesuada in adipiscing faucibus lorem. Tellus
+                            elementum fames senectus nisl tellus nibh. Porta eu, nibh sagittis sit nec elit ipsum dolor.
+                        </p>
+                    </div>
+                    <div class="todo__footer">
+                        <ul class="todo__tags tags">
+                            <li class="tag tag--work">
+                            </li>
+                            <li class="tag tag--study">
+                            </li>
+                            <li class="tag tag--enter">
+                            </li>
+                            <li class="tag tag--family">
+                            </li>
+                        </ul>
+                        <div class="form-check">
+                            <input type="checkbox" id="doneMark-2">
+                            <label for="doneMark-2">Done</label>
+                        </div>
+                    </div>
+                </li>
+                <li class="todo todo--done">
+                    <div class="todo__header">
+                        <h2 class="todo__title">The third task title</h2>
+                        <div class="todo__actions">
+                            <button class="todo__btn"><i class="bi bi-pencil-square"></i></button>
+                            <button class="todo__btn"><i class="bi bi-x-square"></i></button>
+                        </div>
+                    </div>
+                    <div class="todo__body">
+                        <p class="todo__txt">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum rhoncus sit dictum vel lacus,
+                            morbi lobortis.
+                        </p>
+                    </div>
+                    <div class="todo__footer">
+                        <ul class="todo__tags tags">
+                            <li class="tag tag--work">
+                            </li>
+                            <li class="tag tag--study">
+                            </li>
+                            <li class="tag tag--enter">
+                            </li>
+                            <li class="tag tag--family">
+                            </li>
+                        </ul>
+                        <div class="form-check">
+                            <input type="checkbox" id="doneMark-3" checked>
+                            <label for="doneMark-3">Done</label>
+                        </div>
+                    </div>
+                </li> -->
+            </ul>
+        </section>
+        <div class="modal disN" id="addTodoModal">
+            <form class="modal__dialog" id="addForm">
+                <div class="modal__header">
+                    <button class="btn--cancel closeModal" type="reset">Cancel</button>
+                    <button class="btn--submit" type="submit" id="createTodo">Add</button>
+                </div>
+                <div class="modal__body">
+                    <div class="form-group">
+                        <label for="addTitle" class="form-label">Title</label>
+                        <input type="text" id="addTitle" name="todoTitle" class="form-control input"
+                            placeholder="add a title ..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addDescription" class="form-label">Description</label>
+                        <textarea type="text" id="addDescription" name="todoDescription" class="form-control textarea"
+                            placeholder="add a description ..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Tags</div>
+                        <div class="form-checks">
+                            <input type="checkbox" id="work" name="todoTags" value="work">
+                            <label class="tag tag--work" for="work">
+                                <span class="tag__label">work</span>
+                            </label>
+                            <input type="checkbox" id="study" name="todoTags" value="study">
+                            <label class="tag tag--study" for="study">
+                                <span class="tag__label">study</span>
+                            </label>
+                            <input type="checkbox" id="entertainment" name="todoTags" value="enter">
+                            <label class="tag tag--enter" for="entertainment">
+                                <span class="tag__label">entertainment</span>
+                            </label>
+                            <input type="checkbox" id="family" name="todoTags" value="family">
+                            <label class="tag tag--family" for="family">
+                                <span class="tag__label">family</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal disN" id="editTodoModal">
+            <form class="modal__dialog" id="editForm">
+                <div class="modal__header">
+                    <button class="btn--cancel closeModal" type="reset">Cancel</button>
+                    <button class="btn--submit" type="submit">Edit</button>
+                </div>
+                <div class="modal__body">
+                    <div class="form-group">
+                        <label for="addTitle" class="form-label">Title</label>
+                        <input type="text" id="editTitle" name="todoTitle" class="form-control input"
+                            placeholder="add a title ..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addDescription" class="form-label">Description</label>
+                        <textarea type="text" id="editDescription" name="todoDescription" class="form-control textarea"
+                            placeholder="add a description ..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Tags</div>
+                        <div class="form-checks">
+                            <input type="checkbox" id="editWork" name="todoTags" value="work">
+                            <li class="tag tag--work">
+                                <label class="tag__label" for="editWork">work</label>
+                            </li>
+                            <input type="checkbox" id="editStudy" name="todoTags" value="study">
+                            <li class="tag tag--study">
+                                <label class="tag__label" for="editStudy">study</label>
+                            </li>
+                            <input type="checkbox" id="editEntertainment" name="todoTags" value="enter">
+                            <li class="tag tag--enter">
+                                <label class="tag__label" for="editEntertainment">entertainment</label>
+                            </li>
+                            <input type="checkbox" id="editFamily" name="todoTags" value="family">
+                            <li class="tag tag--family">
+                                <label class="tag__label" for="editFamily">family</label>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>

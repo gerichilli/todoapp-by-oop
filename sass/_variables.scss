@@ -1,0 +1,43 @@
+:root {
+    --bg-color: #ffffff;
+    --base-color: #69665c;
+    --text-color: #69665c;
+    --secondary-color: #b2afa1;
+    --card-color: #fff9de;
+    --tag-work-color: #d2ceff;
+    --tag-study-color: #d1e5f7;
+    --tag-enter-color: #ffcece;
+    --tag-family-color: #daf2d6;
+    --tag-active: #f3f3f3;
+    --input-bg: #f9f9f8;
+    --modal-bg: rgba(0,0,0,0.5);
+
+    --header-height: 8.6rem;
+
+    @include respond(desktop-small) {
+        --header-height: 12rem;
+    }
+}
+
+html[data-theme=dark] {
+    --bg-color: #000000;
+    --base-color: #ffffff;
+    --tag-active: #69665c;
+    --modal-bg: rgba(218,242,214,0.5);
+}
+
+$bg-color: var(--bg-color);
+$base-color: var(--base-color);
+$text-color: var(--text-color);
+$secondary-color: var(--secondary-color);
+$card-color: var(--card-color);
+$tag-work: var(--tag-work-color);
+$tag-study: var(--tag-study-color);
+$tag-enter: var(--tag-enter-color);
+$tag-family: var(--tag-family-color);
+$tag-active: var(--tag-active);
+$input-bg: var(--input-bg);
+$modal-bg: var(--modal-bg);
+
+$header-height: var(--header-height)
+

@@ -1,0 +1,109 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 50%;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+
+    @include respond(phone) {
+        font-size: 56.25%;
+    }
+
+    @include respond(tab-land) {
+        font-size: 62.5%;
+    }
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    min-height: 100vh;
+    background-color: $bg-color;
+    color: $text-color;
+    padding: 0 1.6rem;
+
+    @include respond(tab) {
+        padding: 0 3.2rem;
+    }
+
+    @include respond(desktop-small) {
+        padding: 0 6.4rem;
+    }
+
+    @include respond(desktop-small) {
+        padding: 0 8rem;
+    }
+}
+
+.main {
+    @include respond(tab) {
+        display: flex;
+        min-height: calc(100vh - var(--header-height));
+        padding: 3.2rem 0;
+    }
+
+    @include respond(desktop-small) {
+        padding: 3.2rem 0 4.8rem;
+    }
+}
+
+
+button,
+button:focus,
+button:active {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button {
+    background: transparent;
+}
+
+.todos {
+    margin-top: 3.2rem;
+    margin-bottom: 4.8rem;
+    flex-grow: 1;
+
+    @include respond(tab) {
+        margin-top: 0;
+    }
+
+    &__list {
+        list-style: none;
+
+        @include respond(small-tab) {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.4rem;
+        }
+
+        @include respond(tab) {
+            gap: 3.2rem;
+        }
+
+        @include respond(desktop-small) {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.4rem;
+        }
+
+        & > *:not(:last-child) {
+            margin-bottom: 2.4rem;
+
+            @include respond(small-tab) {
+                margin-bottom: 0;
+            }
+        }
+        
+    }
+}

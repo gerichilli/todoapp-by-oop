@@ -30,23 +30,26 @@
         <div class="sidebar">
             <nav class="nav">
                 <ul class="nav__list tags">
-                    <li class="nav__item tag tag--work tag--active">
+                    <li class="nav__item tag tag--all tag--active" data-category="all">
+                        <div class="tag__label">all</div>
+                    </li>
+                    <li class="nav__item tag tag--work" data-category="work">
                         <div class="tag__label">work</div>
                     </li>
-                    <li class="nav__item tag tag--study">
+                    <li class="nav__item tag tag--study" data-category="study">
                         <div class="tag__label">study</div>
                     </li>
-                    <li class="nav__item tag tag--enter">
+                    <li class="nav__item tag tag--enter" data-category="enter">
                         <div class="tag__label">entertainment</div>
                     </li>
-                    <li class="nav__item tag tag--family">
+                    <li class="nav__item tag tag--family" data-category="family">
                         <div class="tag__label">family</div>
                     </li>
                 </ul>
             </nav>
             <div class="form-check form-check--hide">
-                <input type="checkbox" id="hideDone">
-                <label for="hideDone">Hide done tasks</label>
+                <input type="checkbox" id="toggleDone">
+                <label for="toggleDone">Hide done tasks</label>
             </div>
             <img src="./img/girl.png" alt="" class="person">
         </div>
@@ -148,6 +151,10 @@
                     </div>
                 </li> -->
             </ul>
+            <div class="todos__init disN">
+                You don't have any task yet.<br>
+                Let's get started 😉
+            </div>
         </section>
         <div class="modal disN" id="addTodoModal">
             <form class="modal__dialog" id="addForm">

@@ -74,6 +74,7 @@ button {
     margin-top: 3.2rem;
     margin-bottom: 4.8rem;
     flex-grow: 1;
+    position: relative;
 
     @include respond(tab) {
         margin-top: 0;
@@ -105,5 +106,26 @@ button {
             }
         }
         
+    }
+
+    &__init {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: $base-color;
+        font-size: 1.6rem;
+        font-weight: 500;
+        padding: 6.4rem 0;
+
+        @include respond(small-tab) {
+            font-size: 2.2rem;
+        }
     }
 }

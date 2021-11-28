@@ -1,6 +1,6 @@
 "use strict";
 class Todo {
-    id = (Date.now() + '').slice(-9);
+    id = (Date.now() + "").slice(-9);
     done = false;
 
     constructor(title, description, tags) {
@@ -12,27 +12,36 @@ class Todo {
 
 const changeThemeBtn = document.getElementById("themeBtn");
 const logo = document.querySelector(".logo");
-const openAddTodoModalBtns = document.querySelectorAll(".addTodo");
+const openAddTodoModalBtn = document.querySelector(".addTodo");
 const closeModalBtns = document.querySelectorAll(".closeModal");
 const createTodoForm = document.getElementById("addForm");
 const editTodoForm = document.getElementById("editForm");
+const appInitNote = document.querySelector(".todos__init");
 const todoList = document.querySelector(".todos__list");
+const toggleDoneTask = document.getElementById("toggleDone");
+const navList = document.querySelector(".nav__list");
+const navItems = document.querySelectorAll(".nav__item");
 
 class App {
     #theme = "light";
+    #hideDone = false;
     #todos = [];
+
+    // Current todo
     #todo;
     #todoID;
+    #filteredTodos = [];
+    #filteredTag = "all";
 
     constructor() {
-        this._getLocalStorage();
+        this._appInit();
+
         // Theme change
         changeThemeBtn.addEventListener("click", this._changeTheme.bind(this));
 
         // Open modal/Close modal
-        openAddTodoModalBtns.forEach(btn => {
-            btn.addEventListener("click", this._openModal.bind(this));
-        })
+        openAddTodoModalBtn.addEventListener("click", this._openModal.bind(this));
+
         closeModalBtns.forEach(btn => {
             btn.addEventListener("click", this._closeModal.bind(this));
         })
@@ -48,6 +57,12 @@ class App {
 
         // Edit todo
         editTodoForm.addEventListener("submit", this._editTodo.bind(this));
+
+        // Toggle done tasks
+        toggleDoneTask.addEventListener("change", this._handleDoneTasks.bind(this));
+
+        // Filter todo by categories
+        navList.addEventListener("click", this._filterTodos.bind(this));
     }
 
     _createTodo(e) {
@@ -61,8 +76,14 @@ class App {
         // Add new todo to data array
         this.#todos.push(todo);
 
-        // Render todo
-        this._renderTodo(todo);
+        // Render todo if not filtering or todo categories contain filtered tag
+        if(this.#filteredTag === "all" || todo.tags.includes(this.#filteredTag)) {
+            this._renderTodo(todo);
+        }
+
+        // Remove app init effect
+        appInitNote.classList.add("disN");
+        openAddTodoModalBtn.classList.remove("add-btn--first");
 
         // Reset modal
         this._resetModal(createTodoForm, e);
@@ -100,7 +121,7 @@ class App {
 
         // Get data from form
         title = inputTitle.value;
-        description = inputDescription.value || '';
+        description = inputDescription.value || "";
 
         if(inputTags) {
             tags = [...inputTags].filter(tag => tag.checked === true).map(tag => tag.value);
@@ -111,7 +132,7 @@ class App {
 
     _renderTodo(todo) {
         const html = `
-            <li class="todo ${todo.done ? "todo--done" : ""}" data-id=${todo.id}>
+            <li class="todo${todo.done ? " todo--done" : ""}" data-id=${todo.id}>
                 ${this._generateTodoHtml(todo)}
             </li>
         `;
@@ -149,11 +170,27 @@ class App {
         `
     }
 
+    _handleDoneTasks() {
+        this.#hideDone = toggleDoneTask.checked;
+        localStorage.setItem("hideDone", JSON.stringify(this.#hideDone));
+        this._toggleDoneTasks();
+    }
+
+    _toggleDoneTasks() {
+        // Get list of todos that are done
+        const todosDone = Array.from(document.querySelectorAll(".todo"))
+        .filter(todo => todo.classList.contains("todo--done"));
+
+        // Hide or reveal done todos
+        const displayValue = this.#hideDone ? "none" : "flex";
+        todosDone.forEach(todo => todo.style.display = displayValue);
+    }
+
     _markDone(e) {
         if(!e.target.classList.contains("markDone")) return;
 
         const checkmark = e.target.previousElementSibling;
-        this._setTodoID(e);
+        this._setCurrentTodo(e);
         const todoIndex = this.#todos.findIndex(todo => todo.id === this.#todoID);
 
         if(checkmark.checked === false) {
@@ -165,12 +202,42 @@ class App {
         }     
         
         this._setLocalStorage();
+        this._toggleDoneTasks();
+    }
+
+    _filterTodos(e) {
+        const categoryEl = e.target.closest(".nav__item");
+        if(!categoryEl) return;
+
+        // Add/Remove Active Class
+        navItems.forEach(item => item.classList.remove("tag--active"));
+        categoryEl.classList.add("tag--active");
+
+        // Read Selected Category
+        const selectedCategory = categoryEl.getAttribute("data-category");
+        if(!selectedCategory) return;
+
+        if(selectedCategory === "all") {
+            this.#filteredTodos = this.#todos;
+            this.#filteredTag = "all";
+        } else {
+            this.#filteredTodos = this.#todos.filter(todo => todo.tags.includes(selectedCategory));
+            this.#filteredTag = selectedCategory;
+        }
+
+        // Render filtered todos
+        todoList.innerHTML = "";
+        if(!this.#filteredTodos) return;
+        this.#filteredTodos.forEach(todo => this._renderTodo(todo));
+
+        // Reveal/hide done tasks
+        this._toggleDoneTasks();
     }
 
     _deleteTodo(e) {
         if(!e.target.closest(".deleteTodo")) return;
 
-        this._setTodoID(e);
+        this._setCurrentTodo(e);
         
         this.#todos = this.#todos.filter(todo => todo.id !== this.#todoID);
         this.#todo.remove();
@@ -178,9 +245,26 @@ class App {
         this._setLocalStorage();
     }
 
+    _setCurrentTodo(e) {
+        this.#todo = e.target.closest(".todo");
+        this.#todoID = this.#todo.getAttribute("data-id");
+    }
+
+    _changeTheme() {
+        this.#theme = this.#theme === "light" ? "dark" : "light";
+        this._themeInit();
+        localStorage.setItem("theme", JSON.stringify(this.#theme));
+    }
+
+    _themeInit() {
+        changeThemeBtn.setAttribute("data-mode", this.#theme);
+        document.documentElement.setAttribute("data-theme", this.#theme);
+        logo.src = `./img/logo-${this.#theme}.svg`;
+    }
+
     _openEditModal(e) {
         if(!e.target.closest(".modal-btn")) return;
-        this._setTodoID(e);
+        this._setCurrentTodo(e);
 
         // Set value to form
         const todoData = this.#todos.filter(todo => todo.id === this.#todoID)[0];
@@ -199,46 +283,6 @@ class App {
 
         // Open modal
         this._openModal(e);
-    }
-
-    _setTodoID(e) {
-        this.#todo = e.target.closest(".todo");
-        this.#todoID = this.#todo.getAttribute("data-id");
-    }
-
-    _setLocalStorage() {
-        localStorage.setItem("todos", JSON.stringify(this.#todos));
-    }
-
-    _getLocalStorage() {
-        const dataTodos = JSON.parse(localStorage.getItem("todos"));
-        const dataTheme = JSON.parse(localStorage.getItem("theme"));
-
-        if(dataTodos) {
-            this.#todos = dataTodos;
-
-            this.#todos.forEach(todo => {
-                this._renderTodo(todo);
-            })
-        }
-
-        if(dataTheme) {
-            this.#theme = dataTheme;
-            this._themeInit();
-        }
-        
-    }
-
-    _changeTheme() {
-        this.#theme = this.#theme === "light" ? "dark" : "light";
-        this._themeInit();
-        localStorage.setItem("theme", JSON.stringify(this.#theme));
-    }
-
-    _themeInit() {
-        changeThemeBtn.setAttribute("data-mode", this.#theme);
-        document.documentElement.setAttribute("data-theme", this.#theme);
-        logo.src = `./img/logo-${this.#theme}.svg`;
     }
 
     _openModal(e) {
@@ -263,6 +307,42 @@ class App {
 
         // Save data
         this._setLocalStorage();
+    }
+
+    _setLocalStorage() {
+        localStorage.setItem("todos", JSON.stringify(this.#todos));
+    }
+
+    _getLocalStorage() {
+        const dataTodos = JSON.parse(localStorage.getItem("todos"));
+        const dataTheme = JSON.parse(localStorage.getItem("theme"));
+        const dataHideDone = JSON.parse(localStorage.getItem("hideDone"));
+
+        if(dataTodos) {
+            this.#todos = dataTodos;
+
+            this.#todos.forEach(todo => {
+                this._renderTodo(todo);
+            })
+        }
+
+        if(dataTheme) {
+            this.#theme = dataTheme;
+            this._themeInit();
+        }
+
+        if(dataHideDone) {
+            this.#hideDone = dataHideDone;
+            toggleDoneTask.checked = this.#hideDone;
+            this._toggleDoneTasks();
+        }
+    }
+
+    _appInit() {
+        this._getLocalStorage();
+        if(this.#todos.length) return;
+        appInitNote.classList.remove("disN");
+        openAddTodoModalBtn.classList.add("add-btn--first");
     }
 }
 
